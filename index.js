@@ -15,7 +15,7 @@ const userRoute = require("./src/routes/user");
 
 app.use(cors());
 app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.urlencoded({ extended: false }));
 app.use("/image", express.static("upload"));
 
 app.use("/api/v1/books", booksRoute);

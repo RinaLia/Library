@@ -84,21 +84,7 @@ module.exports = {
       });
     });
   },
-  getSearchBooks: function (name) {
-    console.log(name);
-    return new Promise(function (resolve, reject) {
-      connection.query(
-        `SELECT * from books WHERE title LIKE '%${name}%'`,
-        function (error, result) {
-          if (!error) {
-            resolve(result);
-          } else {
-            reject(new Error(error));
-          }
-        }
-      );
-    });
-  },
+
   //Get Sort Data Book
   // getSortBook: function (name) {
   //   return new Promise((resolve, reject) => {

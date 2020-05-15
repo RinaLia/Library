@@ -37,7 +37,7 @@ module.exports = {
       const result = await authorModels.putAuthor(setData, id);
       return response
         .status(200)
-        .json({ status: 200, message: "update authors data", data: result }); //data:setData
+        .json({ status: 200, message: "update authors data", data: setData }); //data:setData
     } catch (error) {
       return response.status(500).json({ status: 500, data: [] });
     }

@@ -64,20 +64,24 @@ module.exports = {
     });
   },
   putBooks: async function (request, response) {
-    try {
-      const setData = request.body;
-      //const {title, description, image, author_id,
-      //genre_id,status_id,created_at,updated_at} = request.id
+    upload(request, response, async function (error) {
+      try {
+        const setData = request.body;
 
-      const id = request.params.id;
-      //const{id} = request.params.id
-      const result = await bookModels.putBooks(setData, id);
-      return response
-        .status(200)
-        .json({ status: 200, message: "update books data", data: result });
-    } catch (error) {
-      return response.status(500).json({ status: 500, data: [] });
-    }
+        //const {title, description, image, author_id,
+        //genre_id,status_id,created_at,updated_at} = request.id
+
+        const id = request.params.id;
+        //const{id} = request.params.id
+        const result = await bookModels.putBooks(setData, id);
+        return response
+          .status(200)
+          .json({ status: 200, message: "update books data", data: result });
+      } catch (error) {
+        //console.log(error);
+        return response.status(500).json({ status: 500, data: [] });
+      }
+    });
   },
   deleteBooks: async (request, response) => {
     try {
