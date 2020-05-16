@@ -7,7 +7,7 @@ const upload = multer({
       callback(null, path.join(__dirname, "../../upload"));
     },
     filename: (request, file, callback) => {
-      callback(null, new Date().toISOString() + file.originalname);
+      callback(null, `${new Date().getDate() + file.originalname}`);
     },
   }),
   fileFilter: function (request, file, callback) {

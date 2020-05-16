@@ -5,7 +5,7 @@ const bcrypt = require("bcryptjs");
 module.exports = {
   postSignUp: async function (request, response) {
     try {
-      const salt = await bcrypt.genSalt(Number(process.env.SALT_FACTOR));
+      //const salt = await bcrypt.genSalt(Number(process.env.SALT_FACTOR));
       let setData = request.body;
 
       setData.password = await bcrypt.hash(setData.password, salt);

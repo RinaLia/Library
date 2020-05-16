@@ -65,21 +65,36 @@ module.exports = {
   },
   putBooks: async function (request, response) {
     upload(request, response, async function (error) {
-      try {
-        const setData = request.body;
-
-        //const {title, description, image, author_id,
-        //genre_id,status_id,created_at,updated_at} = request.id
-
-        const id = request.params.id;
-        //const{id} = request.params.id
-        const result = await bookModels.putBooks(setData, id);
+      if (error instanceof multer.MulterError) {
         return response
-          .status(200)
-          .json({ status: 200, message: "update books data", data: result });
+          .status(500)
+          .json({ status: 500, message: error, data: [] });
+      } else if (error) {
+        return response
+          .status(500)
+          .json({ status: 500, message: error, data: [] });
+      }
+      try {
+        if (!request.file) {
+          return response.status(500).json({
+            status: 500,
+            message: "Please choosing files...",
+            data: [],
+          });
+        } else {
+          let setData = request.body;
+          const id = request.params.id;
+          setData.image = `${process.env.URL}:${process.env.PORT}/image/${request.file.filename}`;
+          console.log(setData);
+          const result = await bookModels.putBooks(setData, id);
+          return response
+            .status(200)
+            .json({ status: 200, message: "success", data: setData });
+        }
       } catch (error) {
-        //console.log(error);
-        return response.status(500).json({ status: 500, data: [] });
+        return response
+          .status(500)
+          .json({ status: 500, message: error, data: [] });
       }
     });
   },
