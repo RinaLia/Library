@@ -35,15 +35,11 @@ DB_DATABASE  = 'dbname'
 * [CORS](#CORS)- CORS is a node.js package for providing a Connect/Express middleware that can be used to enable CORS with various options.
 
 ## Aplication Structure
-*```index.js```- Entry point of our aplication
-
-*```src/config```- This folder contain configuration files of our app, such as mysql connection
-
-*```src/models```- This folder containt files that define query of MysQL
-
-*```src/routes```- Route of our app going here
-
-*```src/controllers```- This folder contain configuration files that links Models to Route
+* ```index.js```- Entry point of our aplication
+* ```src/config```- This folder contain configuration files of our app, such as mysql connection
+* ```src/models```- This folder containt files that define query of MysQL
+* ```src/routes```- Route of our app going here
+* ```src/controllers```- This folder contain configuration files that links Models to Route
 
 
 
