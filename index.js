@@ -24,6 +24,12 @@ const userRoute = require("./src/routes/user");
 //   },
 // };
 
+// var corsOption = {
+//   origin: "http://localhost:4000/books",
+//   optionSuccessStatus: 200,
+// };
+// app.options(cors(corsOption));
+
 app.use(cors());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));

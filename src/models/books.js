@@ -1,42 +1,84 @@
 const connection = require("../config/db");
 
 module.exports = {
-  getBooks: (sort, field, limit = 10, offset = 0, title) => {
-    let total = `SELECT COUNT(id) as total FROM books `;
-    let sql = `SELECT * FROM books`;
-
-    if (title) {
-      sql += ` WHERE title LIKE '%${title}%'`;
-      total += ` WHERE title LIKE '%${title}%'`;
-    }
-
-    if (sort && field) {
-      sql += ` ORDER BY ${field} ${sort}`;
-    }
-
-    sql += ` LIMIT ${Number(limit) || 10} OFFSET ${Number(offset) || 0};`;
+  getBooks: (start, end, data = {}) => {
+    const sql = `SELECT title,description,image,a.name as author,g.name as genre,s.name as status
+    FROM books b JOIN authors a on b.author_id= a.id
+    JOIN genres g on b.genre_id = g.id
+    JOIN  status s on b.status_id = s.id WHERE title LIKE '${
+      data.search || ""
+    }%' 
+      ORDER BY title ${
+        parseInt(data.sort) ? "DESC" : "ASC"
+      } LIMIT ${end} OFFSET ${start}`;
+    // console.log(end);`
+    // `SELECT id, title, description, image, author_id, genre_id, status_id, created_at, update_at FROM books WHERE title LIKE '${
+    //   data.search || ""
+    // }%'
+    // ORDER BY title ${
+    //   parseInt(data.sort) ? "DESC" : "ASC"
+    // } LIMIT ${end} OFFSET ${start}`;
+    // console.log(end);
 
     return new Promise((resolve, reject) => {
-      connection.query(total, (error, data) => {
-        const page = offset / limit + 1;
-        const totalData = data.map((i) => i.total)[0];
-        const hasNext = totalData - page * limit > 0 ? true : false;
-        const pagination = {
-          page,
-          hasNext,
-          total: totalData,
-        };
-
-        connection.query(sql, function (error, result) {
-          if (!error) {
-            resolve({ result, pagination });
-          } else {
-            reject(new Error(error));
-          }
-        });
+      connection.query(sql, (error, result) => {
+        if (error) {
+          reject(Error(error));
+        }
+        resolve(result);
       });
     });
   },
+  getBooksCount: (data = {}) => {
+    const sql = `SELECT COUNT(*) as total FROM books WHERE title LIKE '${
+      data.search || ""
+    }%' 
+    ORDER BY title ${parseInt(data.sort) ? "DESC" : "ASC"}`;
+    return new Promise((resolve, reject) => {
+      connection.query(sql, (error, result) => {
+        if (error) {
+          reject(Error(error));
+        }
+        resolve(result[0].total);
+      });
+    });
+  },
+  // getBooks: (sort, field, limit = 10, offset = 0, title) => {
+  //   let total = `SELECT COUNT(id) as total FROM books `;
+  //   let sql = `SELECT * FROM books`;
+
+  //   if (title) {
+  //     sql += ` WHERE title LIKE '%${title}%'`;
+  //     total += ` WHERE title LIKE '%${title}%'`;
+  //   }
+
+  //   if (sort && field) {
+  //     sql += ` ORDER BY ${field} ${sort}`;
+  //   }
+
+  //   sql += ` LIMIT ${Number(limit) || 10} OFFSET ${Number(offset) || 0};`;
+
+  //   return new Promise((resolve, reject) => {
+  //     connection.query(total, (error, data) => {
+  //       const page = offset / limit + 1;
+  //       const totalData = data.map((i) => i.total)[0];
+  //       const hasNext = totalData - page * limit > 0 ? true : false;
+  //       const pagination = {
+  //         page,
+  //         hasNext,
+  //         total: totalData,
+  //       };
+
+  //       connection.query(sql, function (error, result) {
+  //         if (!error) {
+  //           resolve({ result, pagination });
+  //         } else {
+  //           reject(new Error(error));
+  //         }
+  //       });
+  //     });
+  //   });
+  // },
   postBooks: function (setData) {
     return new Promise(function (resolve, reject) {
       connection.query("INSERT INTO books SET ?", setData, function (
